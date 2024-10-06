@@ -18,5 +18,12 @@ Third, run the script from the repository root, providing your source files (raw
 data and well map):
 
 ```console
-$ python3 src/main path/to/your/raw_data.xlsx --sample-table sample-table.xlsx
+$ python.exe src\main.py C:\User\username\path\to\your\raw_data.xlsx --sample-table sample-table.xlsx
 ```
+
+On Linux, the command might be slightly different, more like this format:
+
+```console
+$ python3 src/main.py path/to/your/raw_data.xlsx --sample-table sample-table.xlsx
+```
+
