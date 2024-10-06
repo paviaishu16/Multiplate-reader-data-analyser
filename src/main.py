@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 
 import pandas as pd
@@ -36,6 +37,13 @@ class CLI:
             action="store",
             help="Path to xlsx file with well labels",
             dest="sample_table_path",
+        )
+
+        parser.add_argument(
+            "-v",
+            "--verbose",
+            help="Log verbosely if used (show debug messages)",
+            action="store_true",
         )
 
         parser.add_argument(
@@ -81,27 +89,38 @@ def preprocess_data(path_to_raw_data: str) -> pd.DataFrame:
         raise MTPAnalyzerException(
             f"Error attempting to read '{path_to_raw_data}' as Excel file: {str(e)}",
         )
+    logging.debug(f"Read '{path_to_raw_data}' successfully as Excel file.")
 
     data = data.drop(columns=COLUMNS_TO_REMOVE)
     data = data.assign(
         # Modify the existing Time column to work in formulas
         Time=lambda x: start_experiment_from_zero(x[TIME_COLUMN]),
     )
+    logging.debug("Reformatted 'Time' column of raw data.")
 
     return data
+
+
+def setup_logging(verbose: bool) -> None:
+    """Setup configuration for logger with verbosity and format."""
+    if verbose:
+        logging.basicConfig(level=logging.DEBUG, format="%(levelname)s - %(message)s")
+    else:
+        logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
 
 
 def main() -> int:
     """Main entrypoint of application."""
     args = CLI.parse_args()
+    setup_logging(args.verbose)
     try:
         data = preprocess_data(args.raw_data_path)
     except MTPAnalyzerException as e:
-        print(
+        logging.error(
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",
-            file=sys.stderr,
         )
         return 1
+    logging.debug("Preprocessing completed successfully.")
 
     print(data.head())
     return 0
