@@ -3,7 +3,8 @@ import os
 import pandas as pd
 import pytest
 
-from src.main import format_time_as_hours, preprocess_data, MTPAnalyzerException
+from preprocessing import format_time_as_hours, preprocess_data
+from exceptions import MTPAnalyzerException
 
 
 def test_preprocess_data():
