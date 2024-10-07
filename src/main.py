@@ -30,7 +30,11 @@ def main() -> int:
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",
         )
         return 1
+    logging.debug("Preprocessing completed successfully.")
 
+    well_mapping = load_sample_table(args.sample_table_path)
+    print(data.head())
+    print(well_mapping)
     return 0
 
 
