@@ -36,7 +36,7 @@ def format_time_as_hours(time: pd.Timedelta) -> str:
     return f"{hours:.1f}"
 
 
-def preprocess_data(path_to_raw_data: str) -> pd.DataFrame:
+def load_mtp_data(path_to_raw_data: str) -> pd.DataFrame:
     """Read data from path and clean and format it."""
     try:
         data = pd.read_excel(path_to_raw_data, dtype={TIME_COLUMN: str})
@@ -54,3 +54,26 @@ def preprocess_data(path_to_raw_data: str) -> pd.DataFrame:
     logging.debug("Reformatted 'Time' column of raw data.")
 
     return data
+
+
+def load_sample_table(sample_table_path: str) -> dict[str, str]:
+    """Load the sample table as DataFrame from provided path."""
+    try:
+        raw_data: pd.DataFrame = pd.read_excel(sample_table_path, index_col=0, header=0)
+    except ValueError as e:
+        raise MTPAnalyzerException(
+            f"Error attempting to read '{sample_table_path}' as Excel file: {str(e)}",
+        )
+    logging.debug(f"Read '{sample_table_path}' successfully as Excel file.")
+
+    well_mapping: dict[str, str] = {}
+    for row_index in raw_data.index.tolist():
+        for column_index in raw_data.columns.tolist():
+            well_index = f"{row_index}{column_index}"
+            well_mapping[well_index] = raw_data.at[row_index, column_index]
+
+    logging.debug(
+        "Generated mapping dictionary for well indices and content of wells."
+    )
+
+    return well_mapping
