@@ -2,9 +2,9 @@
 
 import logging
 
-from exceptions import MTPAnalyzerException
-from preprocessing import load_mtp_data, load_sample_table
 from cli import CLI
+from exceptions import MTPAnalyzerException
+from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
 
 
 def setup_logging(verbose: bool) -> None:
@@ -21,16 +21,14 @@ def main() -> int:
     setup_logging(args.verbose)
     try:
         data = load_mtp_data(args.raw_data_path)
+        well_mapping = load_sample_table(args.sample_table_path)
+        validate_mtp_columns(mtp_data=data, well_mapping=well_mapping)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",
         )
         return 1
-    logging.debug("Preprocessing completed successfully.")
 
-    well_mapping = load_sample_table(args.sample_table_path)
-    print(data.head())
-    print(well_mapping)
     return 0
 
 
