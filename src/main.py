@@ -2,7 +2,6 @@
 
 import logging
 
-from cli import CLI
 from exceptions import MTPAnalyzerException
 from noise_removal import normalize
 from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
