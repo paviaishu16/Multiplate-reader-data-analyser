@@ -2,8 +2,9 @@
 
 import logging
 
+from cli import CLI
 from exceptions import MTPAnalyzerException
-from noise_removal import normalize
+from noise_removal import apply_loess_smoothing, normalize
 from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
 
 
@@ -24,6 +25,7 @@ def main() -> int:
         well_mapping = load_sample_table(args.sample_table_path)
         validate_mtp_columns(mtp_data=data, well_mapping=well_mapping)
         data = normalize(data)
+        data = apply_loess_smoothing(data)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",
@@ -31,9 +33,6 @@ def main() -> int:
         return 1
     logging.debug("Preprocessing completed successfully.")
 
-    well_mapping = load_sample_table(args.sample_table_path)
-    print(data.head())
-    print(well_mapping)
     return 0
 
 
