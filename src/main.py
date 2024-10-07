@@ -4,6 +4,7 @@ import logging
 
 from cli import CLI
 from exceptions import MTPAnalyzerException
+from noise_removal import normalize
 from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
 
 
@@ -23,6 +24,7 @@ def main() -> int:
         data = load_mtp_data(args.raw_data_path)
         well_mapping = load_sample_table(args.sample_table_path)
         validate_mtp_columns(mtp_data=data, well_mapping=well_mapping)
+        data = normalize(data)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",

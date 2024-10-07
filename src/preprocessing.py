@@ -53,9 +53,18 @@ def load_mtp_data(path_to_raw_data: str) -> pd.DataFrame:
     )
     logging.debug("Reformatted 'Time' column of raw data.")
 
+    time_col = data.iloc[:, 0]
+    try:
+        other_cols_as_float = data.iloc[:, 1:].astype("float64")
+    except Exception:
+        raise MTPAnalyzerException("Failed converting well data to float64")
+    float_data = pd.concat([time_col, other_cols_as_float], axis=1)
+
+    logging.debug("Converted well data to float64")
+
     logging.debug("Preprocessing completed successfully.")
 
-    return data
+    return float_data
 
 
 def load_sample_table(sample_table_path: str) -> dict[str, str]:
