@@ -1,1 +1,7 @@
+black
+flake8
+flake8-docstrings
+isort
+mypy
+pandas-stubs
 pytest

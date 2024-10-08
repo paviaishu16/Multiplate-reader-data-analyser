@@ -1,12 +1,14 @@
+"""Starting point and main logic of application."""
+
 import logging
 
+from cli import CLI
 from exceptions import MTPAnalyzerException
 from preprocessing import preprocess_data
-from cli import CLI
 
 
 def setup_logging(verbose: bool) -> None:
-    """Setup configuration for logger with verbosity and format."""
+    """Set up configuration for logger with verbosity and format."""
     if verbose:
         logging.basicConfig(level=logging.DEBUG, format="%(levelname)s - %(message)s")
     else:
@@ -14,7 +16,7 @@ def setup_logging(verbose: bool) -> None:
 
 
 def main() -> int:
-    """Main entrypoint of application."""
+    """Structure overall logic of application."""
     args = CLI.parse_args()
     setup_logging(args.verbose)
     try:

@@ -1,10 +1,12 @@
+"""Tests for preprocessing functionality."""
+
 import os
 
 import pandas as pd
 import pytest
 
-from preprocessing import format_time_as_hours, preprocess_data
 from exceptions import MTPAnalyzerException
+from preprocessing import format_time_as_hours, preprocess_data
 
 
 def test_preprocess_data():
