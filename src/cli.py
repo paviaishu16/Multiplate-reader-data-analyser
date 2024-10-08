@@ -26,6 +26,7 @@ class CLI:
             action="store",
             help="Path to xlsx file with well labels",
             dest="sample_table_path",
+            required=True,
         )
 
         parser.add_argument(
