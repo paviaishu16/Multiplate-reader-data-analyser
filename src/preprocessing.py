@@ -1,3 +1,5 @@
+"""Functions for preprocessing Excel sheets."""
+
 import logging
 
 import pandas as pd
@@ -8,7 +10,7 @@ COLUMNS_TO_REMOVE = ["T° Fluo50_k:450,530"]
 TIME_COLUMN = "Time"
 
 
-def start_experiment_from_zero(original_time: pd.Series) -> pd.Series:
+def start_experiment_from_zero(original_time: pd.Series) -> pd.Series:  # type: ignore
     """Adjust timeseries so that first value start from 0.5 hours.
 
     Takes a Series of str timestamps convertible to Timedelta and
@@ -28,7 +30,7 @@ def start_experiment_from_zero(original_time: pd.Series) -> pd.Series:
     return new_time_str
 
 
-def format_time_as_hours(time: pd.Timedelta) -> pd.Timedelta:
+def format_time_as_hours(time: pd.Timedelta) -> str:
     """Convert timedelta to hours, with one decimal, as string."""
     hours = time.total_seconds() / 3600
     return f"{hours:.1f}"

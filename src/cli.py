@@ -1,11 +1,16 @@
+"""Define the CLI of the app."""
+
 import argparse
+
 from version import __version__
 
 
 class CLI:
+    """Define the CLI."""
 
     @staticmethod
-    def parse_args():
+    def parse_args() -> argparse.Namespace:
+        """Parse the CLI arguments provided to the app."""
         parser = argparse.ArgumentParser(
             description="An app to analyze and generate graphs from raw MTP data"
         )
