@@ -51,14 +51,14 @@ def load_mtp_data(path_to_raw_data: str) -> pd.DataFrame:
         # Modify the existing Time column to work in formulas
         Time=lambda x: start_experiment_from_zero(x[TIME_COLUMN]),
     )
-    logging.debug("Reformatted 'Time' column of raw data.")
+    logging.debug("Reformatted 'Time' column of raw data as hours.")
+    data = data.set_index(TIME_COLUMN)
+    logging.debug("Set 'Time' as index column.")
 
-    time_col = data.iloc[:, 0]
     try:
-        other_cols_as_float = data.iloc[:, 1:].astype("float64")
+        float_data = data.astype("float64")
     except Exception:
         raise MTPAnalyzerException("Failed converting well data to float64")
-    float_data = pd.concat([time_col, other_cols_as_float], axis=1)
 
     logging.debug("Converted well data to float64")
 
@@ -90,15 +90,14 @@ def load_sample_table(sample_table_path: str) -> dict[str, str]:
 
 def validate_mtp_columns(mtp_data: pd.DataFrame, well_mapping: dict[str, str]) -> None:
     """Validate that the sample table matches the MTP data columns."""
-    # -1 because the MTP data also has the Time column
-    if len(mtp_data.columns) - 1 != len(well_mapping):
+    if len(mtp_data.columns) != len(well_mapping):
         logging.warning(
             "The number of wells in the sample table doesn't match the number of "
             "columns in the MTP data"
         )
 
     unknown_mtp_columns_exist = False
-    for well_index in mtp_data.columns[1:]:
+    for well_index in mtp_data:
         if well_index not in well_mapping.keys():
             logging.error(
                 f"Well index {well_index} in MTP data doesn't seem to exist in Sample "

@@ -10,13 +10,11 @@ def test_normalize():
     """Test that values are normalized as expected."""
     input_data = pd.DataFrame(
         {
-            "Time": [0.5, 1.0, 1.5, 2.0, 2.5],
             "A1": [500.0, 750.0, 1000.0, 1000.0, 1000.0],
-        }
+        },
     )
     expected_normalized_data = pd.DataFrame(
         {
-            "Time": [0.5, 1.0, 1.5, 2.0, 2.5],
             "A1": [0.0, 0.5, 1.0, 1.0, 1.0],
         }
     )
