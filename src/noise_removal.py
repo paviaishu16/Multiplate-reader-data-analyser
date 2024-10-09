@@ -13,7 +13,7 @@ def normalize(data: pd.DataFrame) -> pd.DataFrame:
         max_val = s.max()
         return (s - min_val) / (max_val - min_val)  # type: ignore
 
-    data.iloc[:, 1:] = data.iloc[:, 1:].apply(normalize_column)
+    data = data.apply(normalize_column)
 
     return data
 

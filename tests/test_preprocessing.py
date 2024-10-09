@@ -21,13 +21,13 @@ EXAMPLE_SAMPLE_TABLE_PATH = os.path.join("tests", "example_data", "Sample Table.
 def test_load_mtp_data():
     """Test loading MTP data produces expected DataFrame."""
     actual_data = load_mtp_data(EXAMPLE_MTP_DATA_PATH)
-    assert actual_data.shape == (145, 49)
-    assert actual_data.columns[0] == "Time"
+    assert actual_data.shape == (145, 48)
+    assert actual_data.index.name == "Time"
 
     # Spot check
-    assert actual_data.iat[0, 0] == "0.5"
-    assert actual_data.iat[4, 0] == "2.5"
-    assert actual_data.iat[2, 3] == 97
+    assert actual_data.index[0] == "0.5"
+    assert actual_data.index[4] == "2.5"
+    assert actual_data.iat[2, 2] == 97
 
 
 def test_load_mtp_data_with_non_excel_file():
