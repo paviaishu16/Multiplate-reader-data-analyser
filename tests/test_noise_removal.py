@@ -58,14 +58,12 @@ def test_loess_smoothing():
     """Test that values are smoothed as expected."""
     input_data = pd.DataFrame(
         {
-            "Time": [0.5, 1.0, 1.5, 2.0, 2.5],
             "A1": [5.0, 10.0, 100.0, 100.0, 200.0],
             "A2": [5.0, 10.0, 100.0, 100.0, 400.0],
         }
     )
     expected_smoothed_data = pd.DataFrame(
         {
-            "Time": [0.5, 1.0, 1.5, 2.0, 2.5],
             "A1": [5.0, 6.0, 28.0, 100.0, 120.0],
             "A2": [5.0, 6.0, 28.0, 100.0, 160.0],
         }

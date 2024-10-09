@@ -41,8 +41,8 @@ def apply_loess_smoothing(
 ) -> pd.DataFrame:
     """Apply smoothing to all but first column of a dataframe."""
     prev_data = data.shift(1)
-    data.iloc[1:, 1:] = (
-        cur_weight * data.iloc[1:, 1:] + prev_weight * prev_data.iloc[1:, 1:]
+    data.iloc[1:, :] = (
+        cur_weight * data.iloc[1:, :] + prev_weight * prev_data.iloc[1:, :]
     )
     logging.debug("Data has been smoothed")
     return data
