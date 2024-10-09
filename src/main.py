@@ -2,6 +2,7 @@
 
 import logging
 
+from analysis import calculate_slope
 from cli import CLI
 from exceptions import MTPAnalyzerException
 from noise_removal import (
@@ -30,12 +31,15 @@ def main() -> int:
         data = load_mtp_data(args.raw_data_path)
         well_mapping = load_sample_table(args.sample_table_path)
         validate_mtp_columns(mtp_data=data, well_mapping=well_mapping)
+
         data = normalize(data)
         data = apply_loess_smoothing(data)
+
         filled_wells, empty_wells = separate_blanks(data, well_mapping)
         blanked_data = remove_noise(filled_wells, empty_wells)
         normalized_blanked_data = normalize_blanked_data(blanked_data)
-        print(normalized_blanked_data.head())
+        slope_data = calculate_slope(normalized_blanked_data)
+        print(slope_data)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error preprocessing data: {str(e)}",

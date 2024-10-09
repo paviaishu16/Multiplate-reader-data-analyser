@@ -30,10 +30,10 @@ def start_experiment_from_zero(original_time: pd.Series) -> pd.Series:  # type: 
     return new_time_str
 
 
-def format_time_as_hours(time: pd.Timedelta) -> str:
+def format_time_as_hours(time: pd.Timedelta) -> float:
     """Convert timedelta to hours, with one decimal, as string."""
     hours = time.total_seconds() / 3600
-    return f"{hours:.1f}"
+    return hours  # f"{hours:.1f}"
 
 
 def load_mtp_data(path_to_raw_data: str) -> pd.DataFrame:

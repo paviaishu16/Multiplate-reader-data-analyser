@@ -25,8 +25,8 @@ def test_load_mtp_data():
     assert actual_data.index.name == "Time"
 
     # Spot check
-    assert actual_data.index[0] == "0.5"
-    assert actual_data.index[4] == "2.5"
+    assert actual_data.index[0] == 0.5
+    assert actual_data.index[4] == 2.5
     assert actual_data.iat[2, 2] == 97
 
 
@@ -48,7 +48,11 @@ def test_load_sample_table_with_non_excel_file():
 
 def test_format_time_as_hours():
     """Test that timedeltas can be converted to str as expected."""
-    test_cases = [(pd.Timedelta(minutes=30), "0.5")]
+    test_cases = [
+        (pd.Timedelta(minutes=30), 0.5),
+        (pd.Timedelta(hours=1, minutes=30), 1.5),
+        (pd.Timedelta(hours=1, minutes=45), 1.75),
+    ]
     for timedelta_input, expected_output in test_cases:
         assert format_time_as_hours(timedelta_input) == expected_output
 
