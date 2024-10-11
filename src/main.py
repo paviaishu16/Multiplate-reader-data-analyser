@@ -2,7 +2,11 @@
 
 import logging
 
-from analysis import calculate_growth_rates, extract_maximum_growth_rates
+from analysis import (
+    calculate_growth_rates,
+    extract_growth_parameters,
+    extract_maximum_growth_rates,
+)
 from cli import CLI
 from exceptions import MTPAnalyzerException
 from noise_removal import (
@@ -42,7 +46,11 @@ def main() -> int:
 
         growth_rates = calculate_growth_rates(normalized_blanked_data)
         max_growth_rates = extract_maximum_growth_rates(growth_rates)
-        print(max_growth_rates)
+        growth_parameters = extract_growth_parameters(
+            max_growth_rates,
+            normalized_blanked_data,
+        )
+        print(growth_parameters)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error: {str(e)}",
