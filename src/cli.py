@@ -30,6 +30,15 @@ class CLI:
         )
 
         parser.add_argument(
+            "--export-growth-data",
+            action="store_true",
+            help="Export growth summary to 'exports/' in current directory",
+            dest="export_growth_data",
+            default=False,
+            required=False,
+        )
+
+        parser.add_argument(
             "-v",
             "--verbose",
             help="Log verbosely if used (show debug messages)",
