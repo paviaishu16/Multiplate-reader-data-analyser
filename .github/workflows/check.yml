@@ -74,4 +74,16 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run smoke test
-        run: python3 src/main.py 'tests/example_data/Raw data.xlsx' -t './tests/example_data/Sample Table.xlsx' -v
+        run: |
+          python3 src/main.py -v \
+            'tests/example_data/Raw data.xlsx' \
+            -t './tests/example_data/Sample Table.xlsx' \
+            --export-growth-data
+
+      - name: Upload growth data as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: growth_data.xlsx
+          path: growth_data.xlsx
+          if-no-files-found: error
+
