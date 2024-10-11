@@ -2,6 +2,8 @@
 
 import logging
 
+import pandas as pd
+
 from analysis import (
     calculate_growth_rates,
     extract_growth_parameters,
@@ -50,12 +52,20 @@ def main() -> int:
             max_growth_rates,
             normalized_blanked_data,
         )
-        print(growth_parameters)
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error: {str(e)}",
         )
         return 1
+
+    if args.export_growth_data:
+        with pd.ExcelWriter("growth_data.xlsx") as writer:
+            growth_parameters.to_excel(writer, sheet_name="growth_parameters")
+            pd.concat(
+                [max_growth_rates["growth_rates"], max_growth_rates["timestamps"]]
+            ).to_excel(writer, sheet_name="max_growth_rates")
+    else:
+        print(growth_parameters)
 
     return 0
 
