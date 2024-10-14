@@ -84,7 +84,7 @@ def extract_growth_parameters(
     ts = growth_rates["timestamps"]
     gr = growth_rates["growth_rates"]
 
-    lag_time = ts.where(ts > 13).agg("max")
+    lag_time = ts.where(ts > 13).agg("min")
 
     maxidx = gr.where((ts >= 20) & (ts <= 48)).idxmax()
     max_growth_rate = pd.Series({col: gr.at[idx, col] for col, idx in maxidx.items()})
