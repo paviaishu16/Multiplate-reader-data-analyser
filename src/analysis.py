@@ -63,7 +63,9 @@ def extract_maximum_growth_rates(growth_rates: pd.DataFrame) -> dict[str, pd.Dat
 
 
 def extract_growth_parameters(
-    growth_rates: dict[str, pd.DataFrame], blank_data: pd.DataFrame
+    growth_rates: dict[str, pd.DataFrame],
+    blank_data: pd.DataFrame,
+    lag_time_threshold: int,
 ) -> pd.DataFrame:
     """Extract growth parameters from data.
 
@@ -84,7 +86,7 @@ def extract_growth_parameters(
     ts = growth_rates["timestamps"]
     gr = growth_rates["growth_rates"]
 
-    lag_time = ts.where(ts > 13).agg("min")
+    lag_time = ts.where(ts > lag_time_threshold).agg("min")
 
     maxidx = gr.where((ts >= 20) & (ts <= 48)).idxmax()
     max_growth_rate = pd.Series({col: gr.at[idx, col] for col, idx in maxidx.items()})

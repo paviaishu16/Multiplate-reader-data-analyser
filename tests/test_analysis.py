@@ -140,6 +140,7 @@ def test_get_growth_parameters():
     actual_growth_parameters = extract_growth_parameters(
         input_growth_rates,
         input_blank_data,
+        lag_time_threshold=15,
     )
 
     expected_growth_parameters = pd.DataFrame(
