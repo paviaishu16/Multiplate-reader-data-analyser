@@ -60,10 +60,18 @@ def main() -> int:
 
     if args.export_growth_data:
         with pd.ExcelWriter("growth_data.xlsx") as writer:
-            growth_parameters.to_excel(writer, sheet_name="growth_parameters")
-            pd.concat(
-                [max_growth_rates["growth_rates"], max_growth_rates["timestamps"]]
-            ).to_excel(writer, sheet_name="max_growth_rates")
+            growth_parameters.to_excel(
+                writer,
+                sheet_name="Growth Parameters",
+            )
+            max_growth_rates["growth_rates"].to_excel(
+                writer,
+                sheet_name="Growth Rates",
+            )
+            max_growth_rates["timestamps"].to_excel(
+                writer,
+                sheet_name="Growth Rate Timestamps",
+            )
     else:
         print(growth_parameters)
 
