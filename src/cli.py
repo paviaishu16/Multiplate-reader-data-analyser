@@ -39,6 +39,16 @@ class CLI:
         )
 
         parser.add_argument(
+            "--lag-time-threshold",
+            action="store",
+            help="Minimum lag time (L) to look for (Default: %(default)s).",
+            dest="lag_time_threshold",
+            type=float,
+            default=15.0,
+            required=False,
+        )
+
+        parser.add_argument(
             "-v",
             "--verbose",
             help="Log verbosely if used (show debug messages)",

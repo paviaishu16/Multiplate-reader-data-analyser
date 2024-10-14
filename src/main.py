@@ -51,6 +51,7 @@ def main() -> int:
         growth_parameters = extract_growth_parameters(
             max_growth_rates,
             normalized_blanked_data,
+            lag_time_threshold=args.lag_time_threshold,
         )
     except MTPAnalyzerException as e:
         logging.error(
