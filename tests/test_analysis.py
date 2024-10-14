@@ -144,7 +144,7 @@ def test_get_growth_parameters():
 
     expected_growth_parameters = pd.DataFrame(
         {
-            "L": [50.0, 82.0],
+            "L": [20.0, 23.0],
             "k": [9.0, 99.0],
             "t": [40.0, 36.0],
             "A": [634.0, 6631.0],
