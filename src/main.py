@@ -11,6 +11,7 @@ from analysis import (
 )
 from cli import CLI
 from exceptions import MTPAnalyzerException
+from growth_model import gompertz_model_metrics, richards_model_metrics
 from noise_removal import (
     apply_loess_smoothing,
     normalize,
@@ -53,6 +54,14 @@ def main() -> int:
             normalized_blanked_data,
             lag_time_threshold=args.lag_time_threshold,
         )
+        richards_metrics = richards_model_metrics(
+            normalized_blanked_data,
+            growth_parameters,
+        )
+        gompertz_metrics = gompertz_model_metrics(
+            normalized_blanked_data,
+            growth_parameters,
+        )
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error: {str(e)}",
@@ -72,6 +81,14 @@ def main() -> int:
             max_growth_rates["timestamps"].to_excel(
                 writer,
                 sheet_name="Growth Rate Timestamps",
+            )
+            gompertz_metrics.to_excel(
+                writer,
+                sheet_name="Optimal Gompertz",
+            )
+            richards_metrics.to_excel(
+                writer,
+                sheet_name="Optimal Richards",
             )
     else:
         print(growth_parameters)
