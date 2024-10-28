@@ -19,6 +19,7 @@ from noise_removal import (
     remove_noise,
     separate_blanks,
 )
+from plotting import create_all_plots
 from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
 
 
@@ -62,6 +63,12 @@ def main() -> int:
             normalized_blanked_data,
             growth_parameters,
         )
+        if args.generate_plots:
+            create_all_plots(
+                normalized_blanked_data,
+                gompertz_metrics,
+                richards_metrics,
+            )
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error: {str(e)}",
