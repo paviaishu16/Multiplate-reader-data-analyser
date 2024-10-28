@@ -101,3 +101,10 @@ def extract_growth_parameters(
     growth_parameters.columns = pd.Index(["L", "k", "t", "A"])
 
     return growth_parameters
+
+
+def get_replicates_average(data: pd.DataFrame, names: dict[str, str]) -> pd.DataFrame:
+    """Reduce df to average of wells with same sample."""
+    data = data.rename(columns=names)
+    data = data.T.groupby(by=data.columns).mean().T
+    return data

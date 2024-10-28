@@ -51,7 +51,7 @@ def create_timeseries_plot_with_models(
     ax.plot(t_data, gompertz_prediction, label="Gompertz model")
     ax.plot(t_data, richards_prediction, label="Richards model")
 
-    ax.set_title(f"Observed and predicted data for well {well_index}")
+    ax.set_title(f"Observed and predicted data for sample {well_index}")
     ax.set_xlabel("Time (hours)")
     ax.set_ylabel("Population")
     ax.grid(True, linestyle="--", alpha=0.7)
