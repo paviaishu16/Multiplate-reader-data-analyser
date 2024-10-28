@@ -8,6 +8,7 @@ from analysis import (
     calculate_growth_rates,
     extract_growth_parameters,
     extract_maximum_growth_rates,
+    get_replicates_average,
 )
 from cli import CLI
 from exceptions import MTPAnalyzerException
@@ -46,26 +47,30 @@ def main() -> int:
         filled_wells, empty_wells = separate_blanks(data, well_mapping)
         blanked_data = remove_noise(filled_wells, empty_wells)
         normalized_blanked_data = normalize_blanked_data(blanked_data)
+        average_of_replicates = get_replicates_average(
+            normalized_blanked_data,
+            well_mapping,
+        )
         logging.debug("Noise removal and normalization completed successfully.")
 
-        growth_rates = calculate_growth_rates(normalized_blanked_data)
+        growth_rates = calculate_growth_rates(average_of_replicates)
         max_growth_rates = extract_maximum_growth_rates(growth_rates)
         growth_parameters = extract_growth_parameters(
             max_growth_rates,
-            normalized_blanked_data,
+            average_of_replicates,
             lag_time_threshold=args.lag_time_threshold,
         )
         richards_metrics = richards_model_metrics(
-            normalized_blanked_data,
+            average_of_replicates,
             growth_parameters,
         )
         gompertz_metrics = gompertz_model_metrics(
-            normalized_blanked_data,
+            average_of_replicates,
             growth_parameters,
         )
         if args.generate_plots:
             create_all_plots(
-                normalized_blanked_data,
+                average_of_replicates,
                 gompertz_metrics,
                 richards_metrics,
             )
