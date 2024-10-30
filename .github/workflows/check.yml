@@ -5,6 +5,9 @@ on:
   pull_request:
     branches: [main]
 
+permissions:
+  contents: write
+
 jobs:
 
   lint-and-format:
@@ -87,3 +90,15 @@ jobs:
           path: growth_data.xlsx
           if-no-files-found: error
 
+      - name: Deploy example report to GitHub Pages
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+          git fetch origin
+          git switch -C gh-pages
+          cp exports/report.html ~/index.html
+          git rm -rf .
+          cp ~/index.html ./index.html
+          git add index.html
+          git commit -m "Deploy example report"
+          git push -f origin gh-pages
