@@ -1,7 +1,6 @@
 """Test functions for constructing plots."""
 
-import os
-import tempfile
+import base64
 
 import pandas as pd
 
@@ -37,17 +36,18 @@ def test_create_timeseries_plot_with_models():
             "BIC": -211.776687,
         },
     )
-    with tempfile.TemporaryDirectory() as tempdir:
-        create_timeseries_plot_with_models(
-            input_observed_data,
-            input_gompertz_metrics,
-            input_richards_metrics,
-            "A1",
-            os.path.join(tempdir, "A1.png"),
-        )
+    plot = create_timeseries_plot_with_models(
+        input_observed_data,
+        input_gompertz_metrics,
+        input_richards_metrics,
+        "A1",
+    )
 
-        assert len(os.listdir(tempdir)) == 1
-        assert os.path.exists(os.path.join(tempdir, "A1.png"))
+    assert len(plot) != 0
+    try:
+        base64.b64decode(plot)
+    except Exception:
+        assert False
 
 
 def test_create_all_plots():
@@ -85,14 +85,20 @@ def test_create_all_plots():
         },
         index=["A1", "A2"],
     )
-    with tempfile.TemporaryDirectory() as tempdir:
-        create_all_plots(
-            input_observed_data,
-            input_gompertz_metrics,
-            input_richards_metrics,
-            tempdir,
-        )
+    plots = create_all_plots(
+        input_observed_data,
+        input_gompertz_metrics,
+        input_richards_metrics,
+    )
 
-        assert len(os.listdir(tempdir)) == 2
-        assert os.path.exists(os.path.join(tempdir, "A1.png"))
-        assert os.path.exists(os.path.join(tempdir, "A2.png"))
+    assert len(plots) == 2
+    assert len(plots["A1"]) != 0
+    assert len(plots["A2"]) != 0
+    try:
+        base64.b64decode(plots["A1"])
+    except Exception:
+        assert False
+    try:
+        base64.b64decode(plots["A2"])
+    except Exception:
+        assert False

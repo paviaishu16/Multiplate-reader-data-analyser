@@ -49,19 +49,6 @@ class CLI:
         )
 
         parser.add_argument(
-            "-p",
-            "--generate_plots",
-            action="store_true",
-            help=(
-                "Generate plots with observed and predicted data if set. Older plots "
-                "will be overwritten"
-            ),
-            dest="generate_plots",
-            default=False,
-            required=False,
-        )
-
-        parser.add_argument(
             "-v",
             "--verbose",
             help="Log verbosely if used (show debug messages)",

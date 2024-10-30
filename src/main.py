@@ -20,8 +20,8 @@ from noise_removal import (
     remove_noise,
     separate_blanks,
 )
-from plotting import create_all_plots
 from preprocessing import load_mtp_data, load_sample_table, validate_mtp_columns
+from report import generate_report
 
 
 def setup_logging(verbose: bool) -> None:
@@ -68,12 +68,11 @@ def main() -> int:
             average_of_replicates,
             growth_parameters,
         )
-        if args.generate_plots:
-            create_all_plots(
-                average_of_replicates,
-                gompertz_metrics,
-                richards_metrics,
-            )
+        generate_report(
+            average_of_replicates,
+            gompertz_metrics,
+            richards_metrics,
+        )
     except MTPAnalyzerException as e:
         logging.error(
             f"MTPAnalyzer encountered an error: {str(e)}",

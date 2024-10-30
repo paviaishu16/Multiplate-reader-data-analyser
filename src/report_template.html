@@ -1,0 +1,73 @@
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>{{ title }}</title>
+<style>
+body {
+    margin: 40px auto;
+    max-width: 750px;
+    line-height: 1.6;
+    font-size: 18px;
+    color: #444;
+    padding: 0 10px;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #add1b5;
+}
+
+img {
+    width: 100%;
+}
+
+table, th, td {
+    border: 1px solid #444;
+}
+
+th {
+    text-align: center;
+    background-color: #8ab;
+}
+
+td {
+    width: 8em;
+    text-align: right;
+    background-color: #eee;
+}
+
+table {
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: auto;
+}
+
+h1, h2, h3 {
+    line-height: 1.2
+}
+
+h1 {
+    text-align: center;
+}
+
+section {
+    background-color: white;
+    padding: 1em;
+    margin: 1em 0;
+    border-radius: 1em;
+}
+</style>
+    </head>
+    <body>
+        <h1>{{ title }}</h1>
+
+        {% for sample in data %}
+        <section>
+            <h2 class="section-title">Results for sample {{ sample.name }}</h2>
+            <img src="data:image/png;base64,{{ sample.plot }}" alt="{{ sample.name}} plot">
+
+            <h3>Gompertz parameters</h3>
+            {{ sample.gompertz | safe }}
+            <h3>Richards parameters</h3>
+            {{ sample.richards | safe }}
+        </section>
+        {% endfor %}
+    </body>
+</html>
