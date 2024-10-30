@@ -1,6 +1,7 @@
 """Functions for constructing plots."""
 
-import os
+import base64
+from io import BytesIO
 
 import matplotlib.pyplot as plt  # type: ignore
 import pandas as pd
@@ -8,7 +9,7 @@ import pandas as pd
 from exceptions import MTPAnalyzerException
 from growth_model import gompertz_model, richards_model
 
-FIGURE_SIZE = 10, 6
+FIGURE_SIZE = 8, 6
 
 
 def create_timeseries_plot_with_models(
@@ -16,8 +17,7 @@ def create_timeseries_plot_with_models(
     gompertz_parameters: pd.Series,  # type: ignore
     richards_parameters: pd.Series,  # type: ignore
     well_index: str,
-    dest_path: str,
-) -> None:
+) -> str:
     """Create an individual plot showing model and observed population.
 
     Args:
@@ -30,7 +30,7 @@ def create_timeseries_plot_with_models(
     """
     plt.style.use("ggplot")
 
-    fix, ax = plt.subplots(figsize=FIGURE_SIZE)
+    fig, ax = plt.subplots(figsize=FIGURE_SIZE)
 
     t_data = observed_data.index.to_numpy()
     gompertz_prediction = gompertz_model(
@@ -57,16 +57,24 @@ def create_timeseries_plot_with_models(
     ax.grid(True, linestyle="--", alpha=0.7)
     ax.legend()
 
-    plt.savefig(dest_path, dpi=300)
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png", dpi=500)
+    buffer.seek(0)
+    plot_png = buffer.getvalue()
+    buffer.close()
     plt.close()
+
+    return base64.b64encode(plot_png).decode("utf-8")
+
+    return fig
 
 
 def create_all_plots(
     observed_data: pd.DataFrame,
     gompertz_parameters: pd.DataFrame,
     richards_parameters: pd.DataFrame,
-    dest_dir: str = "plots",
-) -> None:
+    dest_dir: str | None = None,
+) -> dict[str, str]:
     """Create plots for all wells in DataFrame.
 
     Create plots for all wells in DataFrame, with model and observed
@@ -80,19 +88,20 @@ def create_all_plots(
                              Richards model.
         dest_dir: Directory in which to save the plots.
     """
-    if not os.path.exists(dest_dir):
-        os.mkdir(dest_dir)
 
     def ensure_series(col: pd.Series | pd.DataFrame) -> pd.Series:  # type: ignore
+        """Ensure mypy that a Series is used."""
         if not isinstance(col, pd.Series):
             raise MTPAnalyzerException(f"Duplicated well index: {col.index}")
         return col
 
+    figures: dict[str, str] = {}
     for well_index in observed_data.columns:
-        create_timeseries_plot_with_models(
+        figures[well_index] = create_timeseries_plot_with_models(
             observed_data.loc[:, well_index],
             ensure_series(gompertz_parameters.loc[well_index, :]),
             ensure_series(richards_parameters.loc[well_index, :]),
             well_index,
-            os.path.join(dest_dir, well_index),
         )
+
+    return figures
