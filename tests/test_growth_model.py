@@ -4,6 +4,7 @@ import pandas as pd
 from pandas.testing import assert_frame_equal, assert_series_equal
 
 from growth_model import (
+    add_better_fit_column,
     calculate_BIC,
     get_performance_metrics,
     gompertz_model,
@@ -124,3 +125,14 @@ def test_get_optimal_parameters_richards():
     )
     actual_optimal_parameters = richards_model_metrics(input_mtp, input_growth_param)
     assert_frame_equal(actual_optimal_parameters, expected_optimal_parameters)
+
+
+def test_add_better_fit_column():
+    """Test that column gets right value."""
+    df_a = pd.DataFrame({"BIC": [3, 4, 5]})
+    df_b = pd.DataFrame({"BIC": [4, 4, 4]})
+    actual_df = add_better_fit_column(df_a, df_b["BIC"])
+    expected_df = pd.DataFrame(
+        {"BIC": [3, 4, 5], "Goodness of fit": ["Yes", "Equal", "No"]}
+    )
+    assert_frame_equal(actual_df, expected_df)

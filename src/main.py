@@ -12,7 +12,11 @@ from analysis import (
 )
 from cli import CLI
 from exceptions import MTPAnalyzerException
-from growth_model import gompertz_model_metrics, richards_model_metrics
+from growth_model import (
+    add_better_fit_column,
+    gompertz_model_metrics,
+    richards_model_metrics,
+)
 from noise_removal import (
     apply_loess_smoothing,
     normalize,
@@ -93,11 +97,11 @@ def main() -> int:
                 writer,
                 sheet_name="Growth Rate Timestamps",
             )
-            gompertz_metrics.to_excel(
+            add_better_fit_column(gompertz_metrics, richards_metrics["BIC"]).to_excel(
                 writer,
                 sheet_name="Optimal Gompertz",
             )
-            richards_metrics.to_excel(
+            add_better_fit_column(richards_metrics, gompertz_metrics["BIC"]).to_excel(
                 writer,
                 sheet_name="Optimal Richards",
             )

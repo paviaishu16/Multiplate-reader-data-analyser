@@ -214,3 +214,19 @@ def richards_model_metrics(
     model_metrics_df = pd.DataFrame(all_model_metrics)
     model_metrics_df.index = mtp_data.columns
     return model_metrics_df
+
+
+def add_better_fit_column(
+    df: pd.DataFrame,
+    other_bic: pd.Series,  # type: ignore
+) -> pd.DataFrame:
+    """Add column to this_model_data saying if it fits best.
+
+    A lower BIC value means a better fit. So we compare the BIC value
+    of df and if it is lower than the one in 'other bic' we say that
+    it is a better fit, indicated with "Yes". Draws result in "Equal".
+    """
+    df["Goodness of fit"] = "Yes"
+    df.loc[other_bic < df["BIC"], "Goodness of fit"] = "No"
+    df.loc[other_bic == df["BIC"], "Goodness of fit"] = "Equal"
+    return df
